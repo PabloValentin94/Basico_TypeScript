@@ -1,0 +1,5 @@
+tsc --init | Gera o arquivo base de configuração do TypeScript.
+
+tsc | Obtém o conteúdo dos arquivos TypeScript contidos no diretório raíz (rootDir) e gera uma versão JavaScript no diretório de saída (outDir).
+
+tsc -w | Faz a mesma coisa que o comando anterior, porém a atualização dos arquivos JS do diretório de saída não necessita de recompilação (Hot Reload).
