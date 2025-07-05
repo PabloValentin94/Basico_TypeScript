@@ -110,3 +110,182 @@ function hello(name?: string) : void {
 hello();
 
 hello("Pablo Valentin");
+
+// Interfaces em Variáveis (Define uma estrutura que pode ser reaproveitada.).
+
+interface CalcOperationNumbers {
+    firstNumber: number;
+    secondNumber: number;
+}
+
+function subtract(numbers: CalcOperationNumbers) : number {
+    return numbers.firstNumber - numbers.secondNumber;
+}
+
+console.log("Subtração:", subtract({ firstNumber: 1, secondNumber: 2 }));
+
+function multiply(numbers: CalcOperationNumbers) : number {
+    return numbers.firstNumber * numbers.secondNumber;
+}
+
+const operationNumbers: CalcOperationNumbers = {
+    firstNumber: 4,
+    secondNumber: 5
+}
+
+console.log("Multiplicação:", multiply(operationNumbers));
+
+// Narrowing (Checagem de tipos.).
+
+function checkVariableType(parameter: number | boolean) : string {
+    if(typeof parameter === "number") {
+        return `${parameter} é um número.`;
+    }
+
+    return `${parameter} não é um número.`;
+}
+
+console.log(checkVariableType(5));
+
+// Generics (Amplia o alcance de funções, por exemplo.).
+
+function displayArrayElements<T>(array: T[]) : void { // A função pode ser usada em arrays de qualquer tipo.
+    array.forEach(element => { console.log(`Elemento: ${element}`); });
+}
+
+displayArrayElements([1, 2, 3]);
+
+displayArrayElements(["A", "B", "C"]);
+
+// Classes.
+
+class User {
+    name;
+    age;
+    isAdmin;
+    permissions;
+
+    // Definição dos tipos das propriedades por inferência.
+    constructor(name: string, age: number, isAdmin: boolean, permissions: string[]) {
+        this.name = name;
+        this.age = age;
+        this.isAdmin = isAdmin;
+        this.permissions = permissions;
+    }
+
+    isAnAdministrator() : void {
+        let message: string = `${this.name}`;
+
+        if(!this.isAdmin) {
+            message += " não";
+        }
+
+        message += " é um administrador.";
+
+        console.log(message);
+    }
+}
+
+const objectClassUser: User = new User("Vanessa", 39, true, ["Create", "Read", "Update", "Delete"]);
+
+console.log(objectClassUser);
+
+objectClassUser.isAnAdministrator();
+
+// Interfaces em Classes (Define uma estrutura base obrigatória para as classes que a utilizam.).
+
+interface ICalc {
+    sum() : void;
+    subtract() : void;
+    multiply() : void;
+    divide() : void;
+}
+
+class Calc implements ICalc {
+    numbers;
+
+    constructor(numbers: CalcOperationNumbers) {
+        this.numbers = numbers
+    }
+
+    sum() : void {
+        console.log("Soma:", this.numbers.firstNumber + this.numbers.secondNumber);
+    }
+
+    subtract() : void {
+        console.log("Subtração:", this.numbers.firstNumber - this.numbers.secondNumber);
+    }
+
+    multiply() : void {
+        console.log("Multiplicação:", this.numbers.firstNumber * this.numbers.secondNumber);
+    }
+
+    divide() : void {
+        console.log("Divisão:", this.numbers.firstNumber / this.numbers.secondNumber);
+    }
+}
+
+const calculadora: Calc = new Calc({ firstNumber: 4, secondNumber: 4 });
+
+calculadora.sum();
+calculadora.subtract();
+calculadora.multiply();
+calculadora.divide();
+
+// Herança.
+
+abstract class Animal {
+    name;
+
+    constructor(name:string) {
+        this.name = name;
+    }
+
+    eat() {
+        console.log(`${this.name} está comendo.`);
+    }
+}
+
+class Dog extends Animal {
+    constructor(name:string) {
+        super(name); // Passando parâmetros para o construtor da classe pai.
+    }
+
+    bark() {
+        console.log(`${this.name} está latindo.`);
+    }
+}
+
+const dog: Dog = new Dog("Nina");
+
+dog.eat();
+dog.bark();
+
+/*
+
+    Decorators (Funções acionadas automaticamente, em um determinado contexto, que alteram a estrutura de algo.).
+    Esse é um recurso mais compelxo que exige um estudo mais aprofundado.
+
+*/
+
+function baseParams() {
+    return function<T extends {new (...args: any): {}}>(constructor: T) {
+        return class extends constructor {
+            id = Math.floor((Math.random() * 10) + 1);
+            createdAt = new Date();
+        }
+    }
+}
+
+@baseParams() // Os objetos da classe abaixo terão mais duas propriedades, definidas pelo Decorator.
+class Person {
+    name;
+
+    constructor(name: string) {
+        this.name = name;
+    }
+}
+
+const person: Person = new Person("Tiago");
+
+console.log(person);
